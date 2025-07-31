@@ -1,8 +1,19 @@
-import {Router} from 'express'
+import { Router } from 'express'
+import { body } from 'express-validator'
+import { createAccount, login } from './handlers'
 const router = Router()
 //routing
 /**Autenticacion y Registro */
-router.post('/auth/register',(req,res) =>{
-    console.log(req.body)
-})
+router.post('/auth/register',
+    body('handle').notEmpty().withMessage('El handle es obligatorio'),
+    body('name').notEmpty().withMessage('El nombre es obligatorio'),
+    body('email').isEmail().withMessage('El email no es  valido'),
+    body('password').isLength({min: 6}).withMessage('La contraseña debe tener al menos 6 caracteres'),
+createAccount)
+
+router.post('/auth/login',
+    body('email').isEmail().withMessage('El email no es  valido'),
+    body('password').notEmpty().withMessage('La contraseña es obligatoria'),
+    login
+)
 export default router
