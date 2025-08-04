@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { body } from 'express-validator'
 import { createAccount, login } from './handlers'
+import { handleInputErrors } from './middleware/validation'
 const router = Router()
 //routing
 /**Autenticacion y Registro */
@@ -9,6 +10,7 @@ router.post('/auth/register',
     body('name').notEmpty().withMessage('El nombre es obligatorio'),
     body('email').isEmail().withMessage('El email no es  valido'),
     body('password').isLength({min: 6}).withMessage('La contraseña debe tener al menos 6 caracteres'),
+    handleInputErrors,
 createAccount)
 
 router.post('/auth/login',
